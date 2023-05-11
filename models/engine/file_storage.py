@@ -11,6 +11,8 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
+    class_list = [BaseModel]
+
     def all(self):
         """returns the saved objects"""
         return type(self).__objects
@@ -34,6 +36,9 @@ class FileStorage:
             with open(type(self).__file_path, "r") as f:
                 json_objects = json.load(f)
             for key in json_objects.keys():
-                type(self).__objects[key] = json_objects[key]["__class__"](**json_objects[key])
-        except:
+                class_name = json_objects[key]["__class__"]
+                if class_name == BaseModel.__name__:
+                    obj = BaseModel(**json_objects[key])
+                    type(self).__objects[key] = obj
+        except FileNotFoundError:
             pass
