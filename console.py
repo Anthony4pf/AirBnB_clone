@@ -6,6 +6,7 @@ import cmd
 from models.base_model import BaseModel
 from models import storage
 
+
 class HBNBCommand(cmd.Cmd):
     '''command line class'''
 
@@ -86,7 +87,6 @@ class HBNBCommand(cmd.Cmd):
             except KeyError:
                 print("** no instance found **")
 
-
     def do_all(self, line):
         """Prints all string representation of all instances"""
 
@@ -111,6 +111,49 @@ class HBNBCommand(cmd.Cmd):
             print(list_objs)
         else:
             print("** class doesn't exist **")
+
+    def do_update(self, line):
+        """Updates an instance based on the class name and id"""
+        if not line:
+            print("** class name missing **")
+            return
+
+        commands = line.split()
+
+        if (len(commands) == 1):
+            print("** instance id missing **")
+            return
+        if (len(commands) == 2):
+            print("** attribute name missing **")
+            return
+        if (len(commands) == 3):
+            print("** value missing **")
+            return
+
+        class_name = commands[0]
+        u_id = commands[1]
+        attr_name = commands[2]
+        attr_value = commands[3]
+
+        if class_name == "BaseModel":
+            storage.reload()
+            all_objs = storage.all()
+            key = class_name + "." + u_id
+            try:
+                obj = all_objs[key]
+            except KeyError:
+                print("** no instance found **")
+                return
+
+            if hasattr(obj, attr_name):
+                data_type = type(getattr(obj, attr_name))
+                setattr(obj, attr_name, data_type(attr_value))
+            else:
+                setattr(obj, attr_name, attr_value)
+            storage.save()
+        else:
+            print("** class doesn't exist **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
