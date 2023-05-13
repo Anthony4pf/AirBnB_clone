@@ -1,4 +1,4 @@
-#!/usr/bin/env Python3
+#!/usr/bin/python3
 """This module contains the BaseModel Class"""
 import uuid
 from datetime import datetime
