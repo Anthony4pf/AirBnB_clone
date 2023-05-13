@@ -5,7 +5,6 @@ module on AirBnB command line intepreter
 import cmd
 from models.base_model import BaseModel
 from models import storage
-import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -109,7 +108,7 @@ class HBNBCommand(cmd.Cmd):
                 dict_objs = all_objs[key].to_dict()
                 if dict_objs["__class__"] == "BaseModel":
                     list_objs.append(str(value))
-            print(json.dumps(list_objs))
+            print(list_objs)
         else:
             print("** class doesn't exist **")
 
