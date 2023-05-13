@@ -10,7 +10,6 @@ class BaseModel():
 
     def __init__(self, *args, **kwargs):
         """Class Constructor"""
-
         if kwargs:
             for attr in kwargs.keys():
                 if attr == '__class__':
@@ -32,7 +31,8 @@ class BaseModel():
 
     def __str__(self):
         """String Representation of the Instance"""
-        return f"[{type(self).__name__}] ({self.id}) {self.__dict__}"
+        return "[{:s}] ({:s}) {}".format(type(self).__name__,
+                                         self.id, self.__dict__)
 
     def save(self):
         """Update the public attr updated_at with the current datetime"""
@@ -42,9 +42,7 @@ class BaseModel():
     def to_dict(self):
         """Returns a dict containing keys/values of __dict__ of the instance"""
         new_dict = {**self.__dict__}
-        new_dict.update({
-                        "__class__": type(self).__name__,
-                        "created_at": self.created_at.isoformat(),
-                        "updated_at": self.updated_at.isoformat()})
-
+        new_dict["__class__"] = type(self).__name__
+        new_dict["created_at"] = new_dict["created_at"].isoformat()
+        new_dict["updated_at"] = new_dict["updated_at"].isoformat()
         return new_dict
