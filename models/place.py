@@ -3,7 +3,7 @@
 from models.base_model import BaseModel
 
 
-class Placee(BaseModel):
+class Place(BaseModel):
     """Place class that inherits from BaseModel"""
     name = ""
     user_id = ""
