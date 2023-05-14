@@ -25,14 +25,13 @@ class BaseModel():
         else:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
-            self.updated_at = datetime.now()
+            self.updated_at = self.created_at
             models.storage.new(self)
             models.storage.save()
 
     def __str__(self):
         """String Representation of the Instance"""
-        return "[{:s}] ({:s}) {}".format(type(self).__name__,
-                                         self.id, self.__dict__)
+        return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
 
     def save(self):
         """Update the public attr updated_at with the current datetime"""
@@ -41,8 +40,9 @@ class BaseModel():
 
     def to_dict(self):
         """Returns a dict containing keys/values of __dict__ of the instance"""
-        new_dict = {**self.__dict__}
-        new_dict["__class__"] = type(self).__name__
-        new_dict["created_at"] = new_dict["created_at"].isoformat()
-        new_dict["updated_at"] = new_dict["updated_at"].isoformat()
-        return new_dict
+        obj_dict = self.__dict__.copy()
+        obj_dict.update({
+                        "__class__": self.__class__.__name__,
+                        "created_at": self.created_at.isoformat(),
+                        "updated_at": self.updated_at.isoformat()})
+        return obj_dict
