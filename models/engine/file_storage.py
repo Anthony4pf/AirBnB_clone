@@ -3,7 +3,7 @@
 import json
 import os
 from models.base_model import BaseModel
-
+from models.user import User
 
 class FileStorage:
     """class FileStorage that serializes instances to a JSON file\
@@ -11,7 +11,7 @@ class FileStorage:
     __file_path = "file.json"
     __objects = {}
 
-    class_list = [BaseModel]
+    class_dict = {"BaseModel": BaseModel, "User": User}
 
     def all(self):
         """returns the saved objects"""
@@ -37,8 +37,7 @@ class FileStorage:
                 json_objects = json.load(f)
             for key in json_objects.keys():
                 class_name = json_objects[key]["__class__"]
-                if class_name == BaseModel.__name__:
-                    obj = BaseModel(**json_objects[key])
-                    type(self).__objects[key] = obj
+                obj = type(self).class_dict[class_name](**json_objects[key])
+                type(self).__objects[key] = obj
         except FileNotFoundError:
             pass

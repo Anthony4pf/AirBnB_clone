@@ -4,6 +4,7 @@ module on AirBnB command line intepreter
 '''
 import cmd
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
 
 
@@ -11,6 +12,7 @@ class HBNBCommand(cmd.Cmd):
     '''command line class'''
 
     prompt = '(hbnb) '
+    class_dict = {"BaseModel": BaseModel, "User": User}
 
     def do_quit(self, line):
         """Quit command to exit the program"""
@@ -32,10 +34,10 @@ class HBNBCommand(cmd.Cmd):
             return
 
         commands = line.split()
-        command = commands[0]
+        class_name = commands[0]
 
-        if command == "BaseModel":
-            my_model = BaseModel()
+        if class_name in type(self).class_dict.keys():
+            my_model = type(self).class_dict[class_name]()
             my_model.save()
             print(my_model.id)
         else:
@@ -52,12 +54,12 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
             return
 
-        command, unique_id = commands[0], commands[1]
+        class_name, unique_id = commands[0], commands[1]
 
-        if command == "BaseModel":
+        if class_name in type(self).class_dict.keys():
             storage.reload()
             all_objs = storage.all()
-            key = command + "." + unique_id
+            key = class_name + "." + unique_id
             try:
                 obj = all_objs[key]
                 print(obj)
@@ -77,7 +79,7 @@ class HBNBCommand(cmd.Cmd):
 
         command, unique_id = commands[0], commands[1]
 
-        if command == "BaseModel":
+        if command in type(self).class_dict.keys():
             storage.reload()
             all_objs = storage.all()
             key = command + "." + unique_id
@@ -103,10 +105,10 @@ class HBNBCommand(cmd.Cmd):
         commands = line.split()
         class_name = commands[0]
 
-        if class_name == "BaseModel":
+        if class_name in type(self).class_dict.keys():
             for key, value in all_objs.items():
                 dict_objs = all_objs[key].to_dict()
-                if dict_objs["__class__"] == "BaseModel":
+                if dict_objs["__class__"] == class_name:
                     list_objs.append(str(value))
             print(list_objs)
         else:
@@ -135,7 +137,7 @@ class HBNBCommand(cmd.Cmd):
         attr_name = commands[2]
         attr_value = commands[3]
 
-        if class_name == "BaseModel":
+        if class_name in type(self).class_dict.keys():
             storage.reload()
             all_objs = storage.all()
             key = class_name + "." + u_id
