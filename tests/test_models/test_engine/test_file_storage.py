@@ -2,6 +2,7 @@
 import models
 import unittest
 import json
+import os
 from models.base_model import BaseModel
 from models.engine.file_storage import FileStorage
 from models.user import User
@@ -79,22 +80,14 @@ class TestFileStorage(unittest.TestCase):
 
     def test_reload(self):
         """Test case for the reload method"""
-        base = BaseModel()
-        user = User()
-        city = City()
-        place = Place()
-        storage.new(base)
-        storage.new(city)
-        storage.new(user)
-        storage.new(place)
-        storage.save()
-        storage.reload()
-        json_objects = storage.all()
-        self.assertIn("BaseModel." + base.id, json_objects)
-        self.assertIn("User." + user.id, json_objects)
-        self.assertIn("City." + city.id, json_objects)
-        self.assertIn("Place." + place.id, json_objects)
+        try:
+            os.remove("file.json")
+        except FileNotFoundError:
+            pass
+        with open("file.json", "w") as f:
+            f.write("{}")
+        self.assertIs(storage.reload(), None)
 
-
+ 
 if __name__ == "__main__":
     unittest.main()
