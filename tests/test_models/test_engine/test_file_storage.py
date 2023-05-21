@@ -50,14 +50,23 @@ class TestFileStorage(unittest.TestCase):
         user = User()
         city = City()
         place = Place()
+        amenity = Amenity()
+        review = Review()
+        state = State()
         storage.new(base)
         storage.new(city)
         storage.new(user)
         storage.new(place)
+        storage.new(amenity)
+        storage.new(review)
+        storage.new(state)
         self.assertIn("BaseModel." + base.id, models.storage.all().keys())
         self.assertIn("User." + user.id, models.storage.all().keys())
         self.assertIn("City." + city.id, models.storage.all().keys())
         self.assertIn("Place." + place.id, models.storage.all().keys())
+        self.assertIn("Amenity." + amenity.id, models.storage.all().keys())
+        self.assertIn("Review." + review.id, models.storage.all().keys())
+        self.assertIn("State." + state.id, models.storage.all().keys())
 
     def test_save(self):
         """Test case for the save method"""
