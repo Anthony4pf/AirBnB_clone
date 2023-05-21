@@ -13,6 +13,7 @@ from models.review import Review
 from models.engine import file_storage
 from models import storage
 
+
 class TestFileStorage(unittest.TestCase):
     """Test cases for the File Storage class"""
 
@@ -68,7 +69,7 @@ class TestFileStorage(unittest.TestCase):
         storage.new(user)
         storage.new(place)
         storage.save()
-        with open ("file.json", "r") as f:
+        with open("file.json", "r") as f:
             file_text = f.read()
         self.assertIn("BaseModel." + base.id, file_text)
         self.assertIn("User." + user.id, file_text)
