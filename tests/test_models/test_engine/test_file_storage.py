@@ -74,10 +74,16 @@ class TestFileStorage(unittest.TestCase):
         user = User()
         city = City()
         place = Place()
+        amenity = Amenity()
+        review = Review()
+        state = State()
         storage.new(base)
         storage.new(city)
         storage.new(user)
         storage.new(place)
+        storage.new(amenity)
+        storage.new(review)
+        storage.new(state)
         storage.save()
         with open("file.json", "r") as f:
             file_text = f.read()
@@ -85,7 +91,9 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn("User." + user.id, file_text)
         self.assertIn("City." + city.id, file_text)
         self.assertIn("Place." + place.id, file_text)
-
+        self.assertIn("Amenity." + amenity.id, file_text)
+        self.assertIn("Review." + review.id, file_text)
+        self.assertIn("State." + state.id, file_text)
 
     def test_reload(self):
         """Test case for the reload method"""
@@ -97,6 +105,6 @@ class TestFileStorage(unittest.TestCase):
             f.write("{}")
         self.assertIs(storage.reload(), None)
 
- 
+
 if __name__ == "__main__":
     unittest.main()
