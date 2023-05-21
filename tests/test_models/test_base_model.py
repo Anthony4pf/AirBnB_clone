@@ -6,7 +6,7 @@ from models.base_model import BaseModel
 from models import base_model
 import time
 from models.engine.file_storage import FileStorage
-
+from models import storage
 
 class TestBaseModel(unittest.TestCase):
     """Test Cases for BaseModel class"""

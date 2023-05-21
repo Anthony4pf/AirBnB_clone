@@ -77,5 +77,24 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn("Place." + place.id, file_text)
 
 
+    def test_reload(self):
+        """Test case for the reload method"""
+        base = BaseModel()
+        user = User()
+        city = City()
+        place = Place()
+        storage.new(base)
+        storage.new(city)
+        storage.new(user)
+        storage.new(place)
+        storage.save()
+        storage.reload()
+        json_objects = storage.all()
+        self.assertIn("BaseModel." + base.id, json_objects)
+        self.assertIn("User." + user.id, json_objects)
+        self.assertIn("City." + city.id, json_objects)
+        self.assertIn("Place." + place.id, json_objects)
+
+
 if __name__ == "__main__":
     unittest.main()
